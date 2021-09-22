@@ -34,30 +34,60 @@ class ActiveEvents extends Component {
                 dataField: 'Timestamp',
                 text: 'Created On',
             },
-        ]    
+        ]
 
         this.state = {
             data: {},
-            todo_list: []
+            todo_list: [],
+            title_error: '',
+            description_error: '',
+            status_error: '',
+
         }
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.validation = this.validation.bind(this);
+
+
     }
 
     handleChange(key, value) {
         const { data } = this.state;
         data[key] = value;
         console.info(data);
-        this.setState({ data });
+        this.setState({ data, title_error: '', description_error: '', status_error: '' });
+    }
+
+    validation(list) {
+        let flag = true;
+        if (list.title == '' || !list.title) {
+            flag = false;
+            this.setState({title_error: 'Title is required!'})
+        }
+        if (list.description == '' || !list.description) {
+            flag = false;
+            this.setState({description_error: 'Description is required!'})
+        }
+        if (list.status == '' || !list.status) {
+            flag = false;
+            this.setState({status_error: 'Status is required!'})
+        }
+        return flag
     }
 
     handleSubmit() {
-        const { data, todo_list} = this.state;
-        todo_list.push(data);
-        console.info(todo_list)
-        this.setState({todo_list});
+        const { data, todo_list } = this.state;
+        let isSubmit = this.validation(data);
+        console.info(isSubmit);
+        if (isSubmit) {
+            todo_list.push(data);
+            console.info(todo_list)
+            this.setState({ todo_list });
+        }
     }
 
     render() {
+        const { title_error, description_error, status_error } = this.state;
         return (
             <div style={{ padding: '10px' }}>
                 <div style={{ width: '30%' }}>
@@ -73,16 +103,16 @@ class ActiveEvents extends Component {
                                     <input class="form-control" type="text"
                                         onChange={e => this.handleChange('title', e.target.value)}
                                     />
-                                    <small style={{ color: 'red' }}></small>
+                                    <small style={{ color: 'red' }}>{title_error}</small>
                                 </div>
                             </Col>
                             <Col id="spaces" md="8">
                                 <div className="form-group mb-2">
-                                    <span>Desvription: </span>
+                                    <span>Description: </span>
                                     <input class="form-control" type="text"
                                         onChange={e => this.handleChange('description', e.target.value)}
                                     />
-                                    <small style={{ color: 'red' }}></small>
+                                    <small style={{ color: 'red' }}>{description_error}</small>
                                 </div>
                             </Col>
                             <Col id="spaces" md="8">
@@ -100,7 +130,6 @@ class ActiveEvents extends Component {
                                     <input class="form-control" type="text"
                                         onChange={e => this.handleChange('title', e.target.value)}
                                     />
-                                    <small style={{ color: 'red' }}></small>
                                 </div>
                             </Col>
                             <Col id="spaces" md="8">
@@ -109,16 +138,20 @@ class ActiveEvents extends Component {
                                     <input class="form-control" type="date"
                                         onChange={e => this.handleChange('Timestamp', e.target.value)}
                                     />
-                                    <small style={{ color: 'red' }}></small>
                                 </div>
                             </Col>
                             <Col id="spaces" md="8">
                                 <div className="form-group mb-2">
                                     <span>Status </span>
-                                    <input class="form-control" type="text"
+                                    <select class="form-control" type="text"
                                         onChange={e => this.handleChange('status', e.target.value)}
-                                    />
-                                    <small style={{ color: 'red' }}></small>
+                                    >
+                                        <option>OPEN</option>
+                                        <option>WORKING</option>
+                                        <option>DONE</option>
+                                        <option>OVERDUE</option>
+                                    </select>
+                                    <small style={{ color: 'red' }}>{status_error}</small>
                                 </div>
                             </Col>
                         </form>
