@@ -16,26 +16,32 @@ class ActiveEvents extends Component {
             {
                 dataField: 'id',
                 text: 'ID',
+                sort: true
             },
             {
                 dataField: 'title',
                 text: 'Title',
+                sort: true
             },
             {
                 dataField: 'description',
                 text: 'Description',
+                sort: true
             },
             {
                 dataField: 'due_date:',
                 text: 'Due Date:',
+                sort: true
             },
             {
                 dataField: 'status',
                 text: 'Status',
+                sort: true
             },
             {
                 dataField: 'timestamp',
                 text: 'Created On',
+                sort: true
             },
         ]
 
@@ -44,7 +50,7 @@ class ActiveEvents extends Component {
             description: '',
             due_date: '',
             timestamp: '',
-            status: '',
+            status: 'OPEN',
 
             data: {},
             todo_list: [],
@@ -101,7 +107,7 @@ class ActiveEvents extends Component {
     render() {
         const { title_error, description_error, status_error, todo_list} = this.state;
         return (
-            <div style={{ padding: '10px' }}>
+            <div style={{ padding: '10px', display: 'flex'}}>
                 <div style={{ width: '30%' }}>
                     <Card>
                         <CardHeader></CardHeader>
@@ -163,16 +169,16 @@ class ActiveEvents extends Component {
                             </Col>
                         </form>
                     </Row>
-                    <button className="btn btn-primary btn-sm radius-md" onClick={() => this.handleSubmit()}><span>Submit</span></button>
+                    <button className="btn btn-primary btn-sm radius-md" onClick={this.handleSubmit}><span>Submit</span></button>
                 </div>
-                <div>
-                    <ToolkitProvider keyField="admin_id" data={todo_list} columns={this.columns} search>
+                <div style={{ width: '68%' }}>
+                    <ToolkitProvider keyField="id" data={this.state.todo_list} columns={this.columns} search>
                         {
                             props => (
 
                                 <div className="mb-4">
                                     <Card>
-                                        <CardHeader><span className="font-18 d-inline-block mt-2">User List</span></CardHeader>
+                                        <CardHeader><span className="font-18 d-inline-block mt-2"> TODO List </span></CardHeader>
                                         <CardBody className="p-2">
                                             <BootstrapTable {...props.baseProps}
                                                 hover wrapperClasses="table-responsive custom-table"
