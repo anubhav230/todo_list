@@ -5,10 +5,9 @@ import {
     Col
 
 } from "reactstrap";
-import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 class ActiveEvents extends Component {
     constructor(props) {
         super(props);
@@ -29,7 +28,7 @@ class ActiveEvents extends Component {
                 sort: true
             },
             {
-                dataField: 'due_date:',
+                dataField: 'due_date',
                 text: 'Due Date:',
                 sort: true
             },
@@ -93,7 +92,7 @@ class ActiveEvents extends Component {
             description: this.state.description,
             due_date: this.state.due_date,
             status: this.state.status,
-            // timestamp: new Date();
+            timestamp: new Date().toLocaleString('en-IN'),
         }
         console.info('isSubmit', isSubmit);
         if (isSubmit) {
@@ -109,7 +108,7 @@ class ActiveEvents extends Component {
         const { title_error, description_error, status_error, todo_list } = this.state;
         return (
             <div>
-                <h2 style={{textAlign: 'center'}}> TODO List </h2>
+                <h2 style={{ textAlign: 'center' }}> TODO List </h2>
                 <div style={{ padding: '10px', display: 'flex' }}>
                     <div style={{ width: '30%' }}>
                         <Card>
@@ -175,24 +174,18 @@ class ActiveEvents extends Component {
                         <button className="btn btn-primary btn-sm radius-md" onClick={this.handleSubmit}><span>Submit</span></button>
                     </div>
                     <div style={{ width: '68%' }}>
-                        <ToolkitProvider keyField="id" data={this.state.todo_list} columns={this.columns} search>
-                            {
-                                props => (
+                        <div className="mb-4">
+                            <Card>
+                                <CardHeader><span className="font-18 d-inline-block mt-2"> TODO List </span></CardHeader>
+                                <CardBody className="p-2">
+                                    <BootstrapTable keyField='id' columns={this.columns} data={todo_list}
+                                        hover wrapperClasses="table-responsive custom-table"
+                                        condensed noDataIndication="No list"
+                                        tabIndexCell pagination={paginationFactory()} />
+                                </CardBody>
+                            </Card>
+                        </div>
 
-                                    <div className="mb-4">
-                                        <Card>
-                                            <CardHeader><span className="font-18 d-inline-block mt-2"> TODO List </span></CardHeader>
-                                            <CardBody className="p-2">
-                                                <BootstrapTable {...props.baseProps}
-                                                    hover wrapperClasses="table-responsive custom-table"
-                                                    condensed noDataIndication="No todo list"
-                                                    tabIndexCell pagination={paginationFactory()} />
-                                            </CardBody>
-                                        </Card>
-                                    </div>
-                                )
-                            }
-                        </ToolkitProvider>
                     </div>
                 </div>
             </div>
