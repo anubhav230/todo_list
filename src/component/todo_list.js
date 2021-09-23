@@ -11,7 +11,6 @@ import {
 import 'bootstrap/dist/css/bootstrap.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import { Link } from 'react-router-dom';
 class ActiveEvents extends Component {
     constructor(props) {
         super(props);
@@ -79,7 +78,8 @@ class ActiveEvents extends Component {
                     <DropdownToggle className="bg-light">&bull;	&bull;	&bull;</DropdownToggle>
                     <DropdownMenu>
                         <ul>
-                            <li><button onClick={() => this.edit(row)}><i class="fa fa-check mr-2"></i><span>edit</span></button></li>
+                            <li><button onClick={() => this.edit(row)}><i class="fa fa-check mr-2"></i><span>Edit</span></button></li>
+                            <li><button onClick={() => this.delete(row)}><i class="fa fa-check mr-2"></i><span>Delete</span></button></li>
                         </ul>
                     </DropdownMenu>
                 </UncontrolledDropdown>
@@ -89,7 +89,6 @@ class ActiveEvents extends Component {
     }
 
     edit(data) {
-
         this.setState({
             title: data.title,
             description: data.description,
@@ -98,6 +97,16 @@ class ActiveEvents extends Component {
             isEdit: true,
             editData: data
         })
+    }
+
+    delete(data) {
+        const { todo_list } = this.state;
+        todo_list.map((item, index) => {
+            if(item.id == data.id) {
+                todo_list.splice(index, 1);
+            }
+        })
+        this.setState({ todo_list })
     }
 
     validation() {
