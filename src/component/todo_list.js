@@ -70,15 +70,15 @@ class ActiveEvents extends Component {
         let flag = true;
         if (this.state.title === '') {
             flag = false;
-            this.setState({title_error: 'Title is required!'})
+            this.setState({ title_error: 'Title is required!' })
         }
         if (this.state.description === '') {
             flag = false;
-            this.setState({description_error: 'Description is required!'})
+            this.setState({ description_error: 'Description is required!' })
         }
         if (this.state.status === '') {
             flag = false;
-            this.setState({status_error: 'Status is required!'})
+            this.setState({ status_error: 'Status is required!' })
         }
         return flag
     }
@@ -86,13 +86,14 @@ class ActiveEvents extends Component {
     handleSubmit() {
         const { todo_list } = this.state;
         let isSubmit = this.validation();
-        let data = {
+        let data = new Object();
+        data = {
             id: todo_list.length + 1,
             title: this.state.title,
             description: this.state.description,
             due_date: this.state.due_date,
             status: this.state.status,
-            timestamp: new Date()
+            // timestamp: new Date();
         }
         console.info('isSubmit', isSubmit);
         if (isSubmit) {
@@ -105,91 +106,94 @@ class ActiveEvents extends Component {
     }
 
     render() {
-        const { title_error, description_error, status_error, todo_list} = this.state;
+        const { title_error, description_error, status_error, todo_list } = this.state;
         return (
-            <div style={{ padding: '10px', display: 'flex'}}>
-                <div style={{ width: '30%' }}>
-                    <Card>
-                        <CardHeader></CardHeader>
-                        <CardBody></CardBody>
-                    </Card>
-                    <Row>
-                        <form id="create-form">
-                            <Col id="spaces" md="8">
-                                <div className="form-group mb-2">
-                                    <span>Title: </span>
-                                    
-                                    <input type="text" class="form-control"
-                                        maxLength='100'
-                                        onChange={e => this.setState({title: e.target.value})}
-                                    />
-                                    <small style={{ color: 'red' }}>{title_error}</small>
-                                </div>
-                            </Col>
-                            <Col id="spaces" md="8">
-                                <div className="form-group mb-2">
-                                    <span>Description: </span>
-                                    <textarea class="form-control" type="text"
-                                        maxLength='1000'
-                                        onChange={e => this.setState({description: e.target.value})}
-                                    />
-                                    <small style={{ color: 'red' }}>{description_error}</small>
-                                </div>
-                            </Col>
-                            <Col id="spaces" md="8">
-                                <div className="form-group mb-2">
-                                    <span>Due date: </span>
-                                    <input class="form-control" type="date"
-                                        onChange={e => this.setState({due_date: e.target.value})}
-                                    />
-                                    <small style={{ color: 'red' }}></small>
-                                </div>
-                            </Col>
-                            <Col id="spaces" md="8">
-                                <div className="form-group mb-2">
-                                    <span>Tag </span>
-                                    <input class="form-control" type="text"
-                                        onChange={e => this.setState({title: e.target.value})}
-                                    />
-                                </div>
-                            </Col>
-                            <Col id="spaces" md="8">
-                                <div className="form-group mb-2">
-                                    <span>Status </span>
-                                    <select class="form-control" type="text"
-                                        onChange={e => this.setState({status: e.target.value})}
-                                    >
-                                        <option>OPEN</option>
-                                        <option>WORKING</option>
-                                        <option>DONE</option>
-                                        <option>OVERDUE</option>
-                                    </select>
-                                    <small style={{ color: 'red' }}>{status_error}</small>
-                                </div>
-                            </Col>
-                        </form>
-                    </Row>
-                    <button className="btn btn-primary btn-sm radius-md" onClick={this.handleSubmit}><span>Submit</span></button>
-                </div>
-                <div style={{ width: '68%' }}>
-                    <ToolkitProvider keyField="id" data={this.state.todo_list} columns={this.columns} search>
-                        {
-                            props => (
+            <div>
+                <h2 style={{textAlign: 'center'}}> TODO List </h2>
+                <div style={{ padding: '10px', display: 'flex' }}>
+                    <div style={{ width: '30%' }}>
+                        <Card>
+                            <CardHeader></CardHeader>
+                            <CardBody></CardBody>
+                        </Card>
+                        <Row>
+                            <form id="create-form">
+                                <Col id="spaces" md="8">
+                                    <div className="form-group mb-2">
+                                        <span>Title: </span>
 
-                                <div className="mb-4">
-                                    <Card>
-                                        <CardHeader><span className="font-18 d-inline-block mt-2"> TODO List </span></CardHeader>
-                                        <CardBody className="p-2">
-                                            <BootstrapTable {...props.baseProps}
-                                                hover wrapperClasses="table-responsive custom-table"
-                                                condensed noDataIndication="No todo list"
-                                                tabIndexCell pagination={paginationFactory()} />
-                                        </CardBody>
-                                    </Card>
-                                </div>
-                            )
-                        }
-                    </ToolkitProvider>
+                                        <input type="text" class="form-control"
+                                            maxLength='100'
+                                            onChange={e => this.setState({ title: e.target.value })}
+                                        />
+                                        <small style={{ color: 'red' }}>{title_error}</small>
+                                    </div>
+                                </Col>
+                                <Col id="spaces" md="8">
+                                    <div className="form-group mb-2">
+                                        <span>Description: </span>
+                                        <textarea class="form-control" type="text"
+                                            maxLength='1000'
+                                            onChange={e => this.setState({ description: e.target.value })}
+                                        />
+                                        <small style={{ color: 'red' }}>{description_error}</small>
+                                    </div>
+                                </Col>
+                                <Col id="spaces" md="8">
+                                    <div className="form-group mb-2">
+                                        <span>Due date: </span>
+                                        <input class="form-control" type="date"
+                                            onChange={e => this.setState({ due_date: e.target.value })}
+                                        />
+                                        <small style={{ color: 'red' }}></small>
+                                    </div>
+                                </Col>
+                                <Col id="spaces" md="8">
+                                    <div className="form-group mb-2">
+                                        <span>Tag </span>
+                                        <input class="form-control" type="text"
+                                            onChange={e => this.setState({ title: e.target.value })}
+                                        />
+                                    </div>
+                                </Col>
+                                <Col id="spaces" md="8">
+                                    <div className="form-group mb-2">
+                                        <span>Status </span>
+                                        <select class="form-control" type="text"
+                                            onChange={e => this.setState({ status: e.target.value })}
+                                        >
+                                            <option>OPEN</option>
+                                            <option>WORKING</option>
+                                            <option>DONE</option>
+                                            <option>OVERDUE</option>
+                                        </select>
+                                        <small style={{ color: 'red' }}>{status_error}</small>
+                                    </div>
+                                </Col>
+                            </form>
+                        </Row>
+                        <button className="btn btn-primary btn-sm radius-md" onClick={this.handleSubmit}><span>Submit</span></button>
+                    </div>
+                    <div style={{ width: '68%' }}>
+                        <ToolkitProvider keyField="id" data={this.state.todo_list} columns={this.columns} search>
+                            {
+                                props => (
+
+                                    <div className="mb-4">
+                                        <Card>
+                                            <CardHeader><span className="font-18 d-inline-block mt-2"> TODO List </span></CardHeader>
+                                            <CardBody className="p-2">
+                                                <BootstrapTable {...props.baseProps}
+                                                    hover wrapperClasses="table-responsive custom-table"
+                                                    condensed noDataIndication="No todo list"
+                                                    tabIndexCell pagination={paginationFactory()} />
+                                            </CardBody>
+                                        </Card>
+                                    </div>
+                                )
+                            }
+                        </ToolkitProvider>
+                    </div>
                 </div>
             </div>
         )
