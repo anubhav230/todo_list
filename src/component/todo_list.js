@@ -138,7 +138,6 @@ class ActiveEvents extends Component {
             status: this.state.status,
             timestamp: new Date().toLocaleString('en-IN'),
         }
-        console.info('isSubmit', isSubmit);
         if (isSubmit) {
             if (isEdit) {
                 todo_list.map((item, index) => {
