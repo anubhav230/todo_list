@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import {
     Card, CardHeader, CardBody,
     Row,
-    Col
+    Col,
+    UncontrolledDropdown,
+    DropdownMenu,
+    DropdownToggle
 
 } from "reactstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import { Link } from 'react-router-dom';
 class ActiveEvents extends Component {
     constructor(props) {
         super(props);
@@ -38,10 +42,10 @@ class ActiveEvents extends Component {
                 sort: true
             },
             {
-                dataField: 'timestamp',
-                text: 'Created On',
-                sort: true
-            },
+                dataField: 'link',
+                text: 'Action',
+                formatter: this.actionFormatUser.bind(this)
+            }
         ]
 
         this.state = {
@@ -56,6 +60,8 @@ class ActiveEvents extends Component {
             title_error: '',
             description_error: '',
             status_error: '',
+            isEdit: false,
+            editData: {} 
 
         }
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -64,6 +70,35 @@ class ActiveEvents extends Component {
 
     }
 
+    actionFormatUser(rowContent, row) {
+
+        return (
+            <div>
+
+                <UncontrolledDropdown nav inNavbar>
+                    <DropdownToggle className="bg-light">&bull;	&bull;	&bull;</DropdownToggle>
+                    <DropdownMenu>
+                        <ul>
+                            <li><button onClick={() => this.edit(row)}><i class="fa fa-check mr-2"></i><span>edit</span></button></li>
+                        </ul>
+                    </DropdownMenu>
+                </UncontrolledDropdown>
+
+            </div>
+        );
+    }
+
+    edit(data) {
+
+        this.setState({
+            title: data.title,
+            description: data.description,
+            due_date: data.due_date,
+            status: data.status,
+            isEdit: true,
+            editData: data
+        })
+    }
 
     validation() {
         let flag = true;
@@ -83,7 +118,7 @@ class ActiveEvents extends Component {
     }
 
     handleSubmit() {
-        const { todo_list } = this.state;
+        const { todo_list, editData, isEdit } = this.state;
         let isSubmit = this.validation();
         let data = new Object();
         data = {
@@ -96,10 +131,18 @@ class ActiveEvents extends Component {
         }
         console.info('isSubmit', isSubmit);
         if (isSubmit) {
-            todo_list.push(data);
+            if (isEdit) {
+                todo_list.map((item, index) => {
+                    if(item.id == editData.id) {
+                        todo_list[index] = data;
+                    }
+                });
+            } else {
+                todo_list.push(data);
+            }
             this.setState({ title_error: '', description_error: '', status_error: '' })
-            console.info(todo_list);
             this.setState({ todo_list });
+            this.setState({ title: '', description: '', due_date: '', status: '' })
 
         }
     }
@@ -123,6 +166,7 @@ class ActiveEvents extends Component {
 
                                         <input type="text" class="form-control"
                                             maxLength='100'
+                                            value={this.state.title && this.state.title}
                                             onChange={e => this.setState({ title: e.target.value })}
                                         />
                                         <small style={{ color: 'red' }}>{title_error}</small>
@@ -133,6 +177,7 @@ class ActiveEvents extends Component {
                                         <span>Description: </span>
                                         <textarea class="form-control" type="text"
                                             maxLength='1000'
+                                            value={this.state.description && this.state.description}
                                             onChange={e => this.setState({ description: e.target.value })}
                                         />
                                         <small style={{ color: 'red' }}>{description_error}</small>
@@ -142,6 +187,7 @@ class ActiveEvents extends Component {
                                     <div className="form-group mb-2">
                                         <span>Due date: </span>
                                         <input class="form-control" type="date"
+                                            value={this.state.due_date && this.state.due_date}
                                             onChange={e => this.setState({ due_date: e.target.value })}
                                         />
                                         <small style={{ color: 'red' }}></small>
@@ -159,8 +205,10 @@ class ActiveEvents extends Component {
                                     <div className="form-group mb-2">
                                         <span>Status </span>
                                         <select class="form-control" type="text"
+                                            value={this.state.status && this.state.status}
                                             onChange={e => this.setState({ status: e.target.value })}
                                         >
+                                            <option value=''>SELECT</option>
                                             <option>OPEN</option>
                                             <option>WORKING</option>
                                             <option>DONE</option>
