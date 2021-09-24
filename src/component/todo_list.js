@@ -136,11 +136,11 @@ class ActiveEvents extends Component {
     }
 
     handleSubmit() {
-        const { todo_list, editData, isEdit } = this.state;
+        const { todo_list, editData, isEdit, tags } = this.state;
         let isSubmit = this.validation();
         let data = new Object();
         let todos = ''
-        todo_list.map(item => {
+        tags.map(item => {
             console.info('rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr', item)
             todos = todos.concat(item+', ')
         })
@@ -153,6 +153,7 @@ class ActiveEvents extends Component {
             timestamp: new Date().toLocaleString('en-IN'),
             tags: todos
         }
+        console.info('dddddddddddddd', data)
         if (isSubmit) {
             if (isEdit) {
                 todo_list.map((item, index) => {
