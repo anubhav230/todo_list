@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-    CardHeader, CardBody,
     UncontrolledDropdown,
     DropdownMenu,
     DropdownToggle
@@ -11,7 +10,6 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Card, Button, Input, Select, DatePicker, Row, Col, Modal } from 'antd'
 import 'antd/dist/antd.css';
-import { PoweroffOutlined } from '@ant-design/icons';
 class ActiveEvents extends Component {
     constructor(props) {
         super(props);
@@ -42,7 +40,7 @@ class ActiveEvents extends Component {
                 sort: true
             },
             {
-                dataField: 'tag_id',
+                dataField: 'tags',
                 text: 'Tags',
                 sort: true
             },
@@ -68,20 +66,7 @@ class ActiveEvents extends Component {
             isEdit: false,
             editData: {},
             show: false,
-            tags: [
-                {
-                    id: 1,
-                    name: 'sunday',
-                },
-                {
-                    id: 2,
-                    name: 'monday',
-                },
-                {
-                    id: 3,
-                    name: 'test',
-                },
-            ]
+            tags: ['default tag']
 
         }
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -91,7 +76,7 @@ class ActiveEvents extends Component {
         this.showModal = this.showModal.bind(this);
         this.handleOk = this.handleOk.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
-    }  
+    }
     actionFormatUser(rowContent, row) {
 
         return (
@@ -154,6 +139,11 @@ class ActiveEvents extends Component {
         const { todo_list, editData, isEdit } = this.state;
         let isSubmit = this.validation();
         let data = new Object();
+        let todos = ''
+        todo_list.map(item => {
+            console.info('rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr', item)
+            todos = todos.concat(item+', ')
+        })
         data = {
             id: todo_list.length + 1,
             title: this.state.title,
@@ -161,6 +151,7 @@ class ActiveEvents extends Component {
             due_date: this.state.due_date,
             status: this.state.status,
             timestamp: new Date().toLocaleString('en-IN'),
+            tags: todos
         }
         if (isSubmit) {
             if (isEdit) {
@@ -172,7 +163,7 @@ class ActiveEvents extends Component {
             } else {
                 todo_list.push(data);
             }
-            this.setState({ title_error: '', description_error: '', status_error: '' })
+            this.setState({ title_error: '', description_error: '', status_error: '', isEdit: false })
             this.setState({ todo_list });
             this.setState({ title: '', description: '', due_date: '', status: '' })
 
@@ -186,8 +177,8 @@ class ActiveEvents extends Component {
         this.setState({ todo_list });
     }
     handleSelect(value) {
-        console.info('ssssss', value)
-        this.setState({ status: value })
+        const { tags } = this.state;
+        this.setState({ status: value, tags })
     }
     handleDateSelect(date, stringDate) {
         console.info(stringDate)
@@ -197,16 +188,18 @@ class ActiveEvents extends Component {
         this.setState({ show: true })
     }
     handleCancel() {
-        this.setState({show: false})
+        this.setState({ show: false })
     }
 
     handleOk() {
-        console.info('ookokoko')
-        this.setState({show: false})
+        const { tags, tag } = this.state;
+        if (!tags.includes(tag)) tags.push(tag)
+        this.setState({ tags })
+        this.setState({ show: false })
     }
 
     render() {
-        const { title_error, description_error, status_error, todo_list, show } = this.state;
+        const { title_error, description_error, status_error, todo_list, show, tags } = this.state;
         const { TextArea } = Input;
         const { Option } = Select;
         return (
@@ -214,7 +207,11 @@ class ActiveEvents extends Component {
                 <Row style={{ backgroundColor: 'DarkGrey' }}>
                     <Col span={24}><h2 style={{ color: 'white' }}>TODO List</h2></Col>
                 </Row>
-                <Modal title="Basic Modal" visible={show} onOk={this.handleOk}  onCancel={this.handleCancel}>
+                <Modal title="Basic Modal" visible={show} onOk={this.handleOk} onCancel={this.handleCancel}>
+                    <Input
+                        maxLength='100'
+                        onChange={e => this.setState({ tag: e.target.value })}
+                    />
                 </Modal>
                 <div style={{ padding: '30px', display: 'flex' }}>
 
@@ -260,15 +257,19 @@ class ActiveEvents extends Component {
                                     </Col>
                                     <br />
                                     <Col>
-                                        <div>
-                                            <span>Tag </span><Button size='small' type="primary" onClick={this.showModal}>+</Button>
-                                            <br />
-                                            <br />
-                                            <Select
-                                                style={{ width: 350 }}
-                                                onChange={this.handleSelect}
-                                            />
-                                        </div>
+                                        <span>Tag </span><Button size='small' type="primary" onClick={this.showModal}>+</Button>
+                                        <br />
+                                        <br />
+                                        <Select
+                                            mode="multiple"
+                                            placeholder="Select a tag"
+                                            style={{ width: 350 }}
+                                            onChange={this.handleSelect}
+                                        >
+                                            {tags.map(item => {
+                                                return <Option value={item}>{item}</Option>
+                                            })}
+                                        </Select>
                                     </Col>
                                     <br />
                                     <Col>
@@ -280,6 +281,7 @@ class ActiveEvents extends Component {
                                                 style={{ width: 350 }}
                                                 onChange={this.handleSelect}
                                             >
+                                                <Option value="">SELECT</Option>
                                                 <Option value="OPEN">OPEN</Option>
                                                 <Option value="WORKING">WORKING</Option>
                                                 <Option value="DONE">DONE</Option>
@@ -297,17 +299,13 @@ class ActiveEvents extends Component {
                     </div>
                     <div style={{ width: '68%' }}>
                         <div className="mb-4">
-                            <Card>
-                                <CardHeader><span className="font-18 d-inline-block mt-2"> TODO List </span></CardHeader>
-                                <CardBody className="p-2">
-                                    <BootstrapTable keyField='id' columns={this.columns} data={todo_list}
-                                        hover wrapperClasses="table-responsive custom-table"
-                                        condensed noDataIndication="No list"
-                                        tabIndexCell pagination={paginationFactory()} />
-                                </CardBody>
+                            <Card title="TODO List">
+                                <BootstrapTable keyField='id' columns={this.columns} data={todo_list}
+                                    hover wrapperClasses="table-responsive custom-table"
+                                    condensed noDataIndication="No list"
+                                    tabIndexCell pagination={paginationFactory()} />
                             </Card>
                         </div>
-
                     </div>
                 </div>
             </div>
