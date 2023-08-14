@@ -210,7 +210,7 @@ class ActiveEvents extends Component {
         return (
             <div style={{ backgroundColor: 'Lavender' }}>
 	                <WhatsappShareButton
-                    url={'https://docs.netlify.com/site-deploys/post-processing'}
+                    url={'https://anubhav-todo-list-demo.netlify.app'}
                     quote={'ssdsdsdsd'}
                     hashtag={'#ssdsdsdsd'}
                 ><WhatsappIcon /></WhatsappShareButton>
