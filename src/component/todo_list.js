@@ -10,6 +10,10 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Card, Button, Input, Select, DatePicker, Row, Col, Modal } from 'antd'
 import 'antd/dist/antd.css';
+import {
+	WhatsappShareButton,
+	WhatsappIcon
+} from "react-share";
 class ActiveEvents extends Component {
     constructor(props) {
         super(props);
