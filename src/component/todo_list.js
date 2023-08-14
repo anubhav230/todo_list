@@ -14,6 +14,7 @@ import {
 	WhatsappShareButton,
 	WhatsappIcon
 } from "react-share";
+import { Helmet } from "react-helmet";
 class ActiveEvents extends Component {
     constructor(props) {
         super(props);
@@ -209,7 +210,13 @@ class ActiveEvents extends Component {
         const { Option } = Select;
         return (
             <div style={{ backgroundColor: 'Lavender' }}>
-	                <WhatsappShareButton
+	 	<Helmet>
+                    <meta charSet="utf-8" />
+                    <meta property="og:description" content={'wwwwwwwwwwwwwwwwwwwwwwwwwwww'} />
+                    {/* <meta property="og:image" content={imageURL !== '' ? `${project.pictureUrl}` : ''} /> */}
+                    {/* <meta property="fb:app_id" content="198985484382564" /> */}
+                </Helmet>
+	        <WhatsappShareButton
                     url={'https://anubhav-todo-list-demo.netlify.app'}
                     quote={'ssdsdsdsd'}
                     hashtag={'#ssdsdsdsd'}
