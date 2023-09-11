@@ -210,21 +210,15 @@ class ActiveEvents extends Component {
         const { Option } = Select;
         return (
             <div style={{ backgroundColor: 'Lavender' }}>
-	 	// <Helmet>
-   //                  <meta charSet="utf-8" />
-   //                  <meta property="og:description" content={'wwwwwwwwwwwwwwwwwwwwwwwwwwww'} />
-   //                  {/* <meta property="og:image" content={imageURL !== '' ? `${project.pictureUrl}` : ''} /> */}
-   //                  {/* <meta property="fb:app_id" content="198985484382564" /> */}
-   //              </Helmet>
 	        <WhatsappShareButton
                     url={'https://anubhav-todo-list-demo.netlify.app'}
                     quote={'ssdsdsdsd'}
-			title={'sssssssssssssssssssssss'}
-                    	description={'1111111111111111'}
+			title={`Ritu's First  Todo List`}
+                    	description={`Ritu's First  Todo List`}
                     hashtag={'#ssdsdsdsd'}
                 ><WhatsappIcon /></WhatsappShareButton>
                 <Row style={{ backgroundColor: 'DarkGrey' }}>
-                    <Col span={24}><h2 style={{ color: 'white' }}>TODO List</h2></Col>
+                    <Col span={24}><h2 style={{ color: 'white' }}>{`Ritu's First  Todo List`}</h2></Col>
                 </Row>
                 <Modal title="Basic Modal" visible={show} onOk={this.handleOk} onCancel={this.handleCancel}>
                     <Input
